@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Copy the fat JAR
 COPY build/libs/frontend-1.0.0-SNAPSHOT-all.jar app.jar
+COPY frontend/build/libs/frontend*.jar app.jar
 
 # Expose the frontend port
 EXPOSE 3000
