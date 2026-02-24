@@ -1,0 +1,4 @@
+rootProject.name = 'scala-hello-world'
+
+include 'backend'
+include 'frontend'

@@ -1,0 +1,37 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = 'com.example.frontend.Server'
+}
+
+dependencies {
+    // Simple HTTP server for serving static files
+    implementation 'com.lihaoyi:cask_3:0.9.2'
+    
+    // Logging
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+}
+
+tasks.named('run') {
+    standardInput = System.in
+}
+
+// Create fat JAR for deployment
+tasks.register('fatJar', Jar) {
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    from('src/main/resources') {
+        into 'static'
+    }
+    with jar
+}
+
+build.dependsOn fatJar

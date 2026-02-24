@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scala Hello World</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .response {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            display: none;
+        }
+        .response.show {
+            display: block;
+        }
+        .response h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .response pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Scala Hello World Application</h1>
+        
+        <div class="input-group">
+            <label for="nameInput">Enter your name:</label>
+            <input type="text" id="nameInput" placeholder="World" value="World">
+        </div>
+        
+        <button onclick="sayHello()">Say Hello</button>
+        <button onclick="checkStatus()">Check Backend Status</button>
+        
+        <div id="response" class="response">
+            <h3>Response:</h3>
+            <pre id="responseContent"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Configure the backend URL (change this for production)
+        const BACKEND_URL = 'http://localhost:8080';
+
+        async function sayHello() {
+            const name = document.getElementById('nameInput').value || 'World';
+            const responseDiv = document.getElementById('response');
+            const responseContent = document.getElementById('responseContent');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/hello?name=${encodeURIComponent(name)}`);
+                const data = await response.json();
+                
+                responseContent.textContent = JSON.stringify(data, null, 2);
+                responseDiv.classList.add('show');
+                responseDiv.classList.remove('error');
+            } catch (error) {
+                responseContent.textContent = `Error: ${error.message}\n\nMake sure the backend is running on port 8080!`;
+                responseDiv.classList.add('show', 'error');
+            }
+        }
+
+        async function checkStatus() {
+            const responseDiv = document.getElementById('response');
+            const responseContent = document.getElementById('responseContent');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/status`);
+                const data = await response.json();
+                
+                responseContent.textContent = JSON.stringify(data, null, 2);
+                responseDiv.classList.add('show');
+                responseDiv.classList.remove('error');
+            } catch (error) {
+                responseContent.textContent = `Error: ${error.message}\n\nMake sure the backend is running on port 8080!`;
+                responseDiv.classList.add('show', 'error');
+            }
+        }
+
+        // Allow Enter key to trigger hello
+        document.getElementById('nameInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sayHello();
+            }
+        });
+    </script>
+</body>
+</html>
