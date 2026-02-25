@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 application {
@@ -18,17 +19,21 @@ tasks.named('run') {
     standardInput = System.in
 }
 
-// Create a fat JAR for easy deployment
-tasks.register('fatJar', Jar) {
-    archiveClassifier = 'all'
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+// Configure shadowJar to replace the regular jar
+shadowJar {
+    archiveClassifier.set('')
+    archiveVersion.set('1.0.0-SNAPSHOT')
+    mergeServiceFiles()
     manifest {
-        attributes 'Main-Class': application.mainClass.get()
+        attributes 'Main-Class': 'com.example.backend.Main'
     }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
 }
 
-build.dependsOn fatJar
+// Disable the regular jar task - we only want shadowJar
+jar {
+    enabled = false
+}
+
+// Make build depend on shadowJar instead of jar
+build.dependsOn shadowJar
+build.dependsOn.remove(jar)
