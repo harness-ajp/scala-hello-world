@@ -8,10 +8,7 @@ application {
 }
 
 dependencies {
-    // Simple HTTP server for serving static files
     implementation 'com.lihaoyi:cask_3:0.9.2'
-    
-    // Logging
     implementation 'ch.qos.logback:logback-classic:1.4.14'
 }
 
@@ -19,7 +16,6 @@ tasks.named('run') {
     standardInput = System.in
 }
 
-// Configure shadowJar to replace the regular jar
 shadowJar {
     archiveClassifier.set('')
     archiveVersion.set('1.0.0-SNAPSHOT')
@@ -29,11 +25,9 @@ shadowJar {
     }
 }
 
-// Disable the regular jar task - we only want shadowJar
 jar {
     enabled = false
 }
 
-// Make build depend on shadowJar instead of jar
 build.dependsOn shadowJar
 build.dependsOn.remove(jar)

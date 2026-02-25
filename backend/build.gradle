@@ -19,7 +19,6 @@ tasks.named('run') {
     standardInput = System.in
 }
 
-// Configure shadowJar to replace the regular jar
 shadowJar {
     archiveClassifier.set('')
     archiveVersion.set('1.0.0-SNAPSHOT')
@@ -29,11 +28,9 @@ shadowJar {
     }
 }
 
-// Disable the regular jar task - we only want shadowJar
 jar {
     enabled = false
 }
 
-// Make build depend on shadowJar instead of jar
 build.dependsOn shadowJar
 build.dependsOn.remove(jar)
