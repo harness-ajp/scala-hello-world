@@ -1,7 +1,11 @@
-# Gradle
+# SBT
+target/
+project/target/
+project/project/
+
+# Gradle (removed)
 .gradle/
 build/
-!gradle/wrapper/gradle-wrapper.jar
 gradle-app.setting
 .gradletasknamecache
 
