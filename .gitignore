@@ -41,3 +41,5 @@ Thumbs.db
 .bloop/
 metals.sbt
 project/metals.sbt
+
+.claude/
