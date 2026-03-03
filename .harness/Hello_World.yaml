@@ -1,0 +1,187 @@
+pipeline:
+  name: Hello World
+  identifier: Hello_World
+  projectIdentifier: NCLH_POV
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.githubharnessajp
+        repoName: scala-hello-world
+        build: <+input>
+  stages:
+    - stage:
+        name: Build Stack
+        identifier: Build_Stack
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Gitleaks
+                  name: GitLeaks
+                  identifier: GitLeaks
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: repository
+                      detection: auto
+                    advanced:
+                      log:
+                        level: info
+              - step:
+                  type: Test
+                  name: BuildAndTest
+                  identifier: BuildAndTest
+                  spec:
+                    shell: Sh
+                    command: sbt assembly
+                    intelligenceMode: true
+              - parallel:
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: FrontEnd
+                      identifier: FrontEnd
+                      spec:
+                        connectorRef: account.harnessdockerhubajp
+                        repo: ajpahl1008/scala-hello-world-frontend
+                        tags:
+                          - <+pipeline.sequenceId>
+                        caching: true
+                        dockerfile: frontend/Dockerfile
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: BackEnd
+                      identifier: BackEnd
+                      spec:
+                        connectorRef: account.harnessdockerhubajp
+                        repo: ajpahl1008/scala-hello-world-backend
+                        tags:
+                          - <+pipeline.sequenceId>
+                        caching: true
+                        dockerfile: backend/Dockerfile
+    - stage:
+        name: Deploy to DEV
+        identifier: Deploy_to_DEV
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          gitOpsEnabled: true
+          execution:
+            steps:
+              - step:
+                  type: GitOpsUpdateReleaseRepo
+                  name: Update Release Repo
+                  identifier: updateReleaseRepo
+                  timeout: 10m
+                  spec: {}
+              - step:
+                  type: HarnessApproval
+                  name: Review Before Merge
+                  identifier: Review_Before_Merge
+                  spec:
+                    approvalMessage: Please review the following information and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    isAutoRejectEnabled: false
+                    approvers:
+                      userGroups:
+                        - account._account_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+                  timeout: 1d
+                  when:
+                    stageStatus: All
+                    condition: "false"
+              - step:
+                  type: MergePR
+                  name: Merge PR
+                  identifier: mergePR
+                  spec:
+                    deleteSourceBranch: true
+                  timeout: 10m
+              - step:
+                  type: GitOpsFetchLinkedApps
+                  name: Fetch Linked Apps
+                  identifier: fetchLinkedApps
+                  timeout: 10m
+                  spec: {}
+              - step:
+                  type: GitOpsSync
+                  name: GitOpsSync
+                  identifier: GitOpsSync
+                  spec:
+                    prune: false
+                    dryRun: false
+                    applyOnly: false
+                    forceApply: false
+                    retryStrategy: {}
+                    retry: false
+                    syncOptions:
+                      skipSchemaValidation: false
+                      autoCreateNamespace: false
+                      pruneResourcesAtLast: false
+                      applyOutOfSyncOnly: false
+                      replaceResources: false
+                      prunePropagationPolicy: foreground
+                      respectIgnoreDifferences: false
+                      serverSideApply: false
+                    applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
+                  timeout: 10m
+                  when:
+                    stageStatus: All
+                    condition: "false"
+            rollbackSteps: []
+          environment:
+            environmentRef: development
+            deployToAll: false
+            gitOpsClusters:
+              - identifier: incluster
+                agentIdentifier: harnessgitopsagent
+          services:
+            values:
+              - serviceRef: Scala_Hello_World_Backend
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+              - serviceRef: Scala_Hello_World_Frontend
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+            metadata:
+              parallel: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+  description: Created by AJ Pahl
+  allowStageExecutions: false
