@@ -147,6 +147,256 @@ pipeline:
                   when:
                     stageStatus: All
                     condition: "false"
+              - step:
+                  type: GitOpsRollout
+                  name: GitOpsRollout 20
+                  identifier: GitOpsRollout_20
+                  spec:
+                    appName: scala-hello-backend
+                    agentIdentifier: harnessgitopsagent
+                    namespace: scala-apps-development
+                    rolloutName: canary
+                  timeout: 10m
+              - parallel:
+                  - step:
+                      type: Verify
+                      name: Verify_1
+                      identifier: Verify_1
+                      spec:
+                        isMultiServicesOrEnvs: true
+                        type: Canary
+                        monitoredService:
+                          type: Default
+                          spec: {}
+                        spec:
+                          sensitivity: HIGH
+                          duration: 15m
+                      timeout: 2h
+                      failureStrategies:
+                        - onFailure:
+                            errors:
+                              - Verification
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: StageRollback
+                        - onFailure:
+                            errors:
+                              - Unknown
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: Ignore
+                  - step:
+                      type: GitOpsRollout
+                      name: Wait 20
+                      identifier: Wait_20
+                      spec:
+                        appName: scala-hello-backend
+                        agentIdentifier: harnessgitopsagent
+                        namespace: scala-apps-development
+                        rolloutName: canary
+                        waitUntilHealthStatus:
+                          healthStatus: Suspended
+                          healthMessage: CanaryPauseStep
+                      timeout: 10m
+              - step:
+                  type: GitOpsRollout
+                  name: GitOpsRollout 40
+                  identifier: GitOpsRollout_40
+                  spec:
+                    appName: scala-hello-backend
+                    agentIdentifier: harnessgitopsagent
+                    namespace: scala-apps-development
+                    rolloutName: canary
+                    waitUntilHealthStatus:
+                      healthStatus: Suspended
+                  timeout: 10m
+              - parallel:
+                  - step:
+                      type: Verify
+                      name: Verify_2
+                      identifier: Verify_2
+                      spec:
+                        isMultiServicesOrEnvs: true
+                        type: Canary
+                        monitoredService:
+                          type: Default
+                          spec: {}
+                        spec:
+                          sensitivity: HIGH
+                          duration: 15m
+                      timeout: 2h
+                      failureStrategies:
+                        - onFailure:
+                            errors:
+                              - Verification
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: StageRollback
+                        - onFailure:
+                            errors:
+                              - Unknown
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: Ignore
+                  - step:
+                      type: GitOpsRollout
+                      name: Wait 40
+                      identifier: Wait_40
+                      spec:
+                        appName: scala-hello-backend
+                        agentIdentifier: harnessgitopsagent
+                        namespace: scala-apps-development
+                        rolloutName: canary
+                        waitUntilHealthStatus:
+                          healthStatus: Suspended
+                          healthMessage: CanaryPauseStep
+                      timeout: 10m
+              - step:
+                  type: GitOpsRollout
+                  name: GitOpsRollout 60
+                  identifier: GitOpsRollout_60
+                  spec:
+                    appName: scala-hello-backend
+                    agentIdentifier: harnessgitopsagent
+                    namespace: scala-apps-development
+                    rolloutName: canary
+                    waitUntilHealthStatus:
+                      healthStatus: Suspended
+                  timeout: 10m
+              - parallel:
+                  - step:
+                      type: Verify
+                      name: Verify_3
+                      identifier: Verify_3
+                      spec:
+                        isMultiServicesOrEnvs: true
+                        type: Canary
+                        monitoredService:
+                          type: Default
+                          spec: {}
+                        spec:
+                          sensitivity: HIGH
+                          duration: 15m
+                      timeout: 2h
+                      failureStrategies:
+                        - onFailure:
+                            errors:
+                              - Verification
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: StageRollback
+                        - onFailure:
+                            errors:
+                              - Unknown
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: Ignore
+                  - step:
+                      type: GitOpsRollout
+                      name: Wait 60
+                      identifier: Wait_60
+                      spec:
+                        appName: scala-hello-backend
+                        agentIdentifier: harnessgitopsagent
+                        namespace: scala-apps-development
+                        rolloutName: canary
+                        waitUntilHealthStatus:
+                          healthStatus: Suspended
+                          healthMessage: CanaryPauseStep
+                      timeout: 10m
+              - step:
+                  type: GitOpsRollout
+                  name: GitOpsRollout 80
+                  identifier: GitOpsRollout_80
+                  spec:
+                    appName: scala-hello-backend
+                    agentIdentifier: harnessgitopsagent
+                    namespace: scala-apps-development
+                    rolloutName: canary
+                  timeout: 10m
+              - parallel:
+                  - step:
+                      type: Verify
+                      name: Verify_4
+                      identifier: Verify_4
+                      spec:
+                        isMultiServicesOrEnvs: true
+                        type: Canary
+                        monitoredService:
+                          type: Default
+                          spec: {}
+                        spec:
+                          sensitivity: HIGH
+                          duration: 5m
+                      timeout: 2h
+                      failureStrategies:
+                        - onFailure:
+                            errors:
+                              - Verification
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: StageRollback
+                        - onFailure:
+                            errors:
+                              - Unknown
+                            action:
+                              type: ManualIntervention
+                              spec:
+                                timeout: 2h
+                                onTimeout:
+                                  action:
+                                    type: Ignore
+                  - step:
+                      type: GitOpsRollout
+                      name: Wait 80
+                      identifier: Wait_80
+                      spec:
+                        appName: scala-hello-backend
+                        agentIdentifier: harnessgitopsagent
+                        namespace: scala-apps-development
+                        rolloutName: canary
+                        waitUntilHealthStatus:
+                          healthStatus: Suspended
+                          healthMessage: CanaryPauseStep
+                      timeout: 10m
+              - step:
+                  type: GitOpsRollout
+                  name: GitOpsRollout 100
+                  identifier: GitOpsRollout_100
+                  spec:
+                    appName: scala-hello-backend
+                    agentIdentifier: harnessgitopsagent
+                    namespace: scala-apps-development
+                    rolloutName: canary
+                  timeout: 10m
             rollbackSteps: []
           environment:
             environmentRef: development
