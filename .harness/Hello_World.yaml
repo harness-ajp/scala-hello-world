@@ -160,8 +160,8 @@ pipeline:
               - parallel:
                   - step:
                       type: Verify
-                      name: Verify_1
-                      identifier: Verify_1
+                      name: Verify 20
+                      identifier: Verify_20
                       spec:
                         isMultiServicesOrEnvs: true
                         type: Canary
@@ -170,7 +170,7 @@ pipeline:
                           spec: {}
                         spec:
                           sensitivity: HIGH
-                          duration: 15m
+                          duration: 5m
                       timeout: 2h
                       failureStrategies:
                         - onFailure:
@@ -221,8 +221,8 @@ pipeline:
               - parallel:
                   - step:
                       type: Verify
-                      name: Verify_2
-                      identifier: Verify_2
+                      name: Verify 40
+                      identifier: Verify_40
                       spec:
                         isMultiServicesOrEnvs: true
                         type: Canary
@@ -231,7 +231,7 @@ pipeline:
                           spec: {}
                         spec:
                           sensitivity: HIGH
-                          duration: 15m
+                          duration: 5m
                       timeout: 2h
                       failureStrategies:
                         - onFailure:
@@ -282,8 +282,8 @@ pipeline:
               - parallel:
                   - step:
                       type: Verify
-                      name: Verify_3
-                      identifier: Verify_3
+                      name: Verify 60
+                      identifier: Verify_60
                       spec:
                         isMultiServicesOrEnvs: true
                         type: Canary
@@ -292,7 +292,7 @@ pipeline:
                           spec: {}
                         spec:
                           sensitivity: HIGH
-                          duration: 15m
+                          duration: 5m
                       timeout: 2h
                       failureStrategies:
                         - onFailure:
@@ -341,7 +341,7 @@ pipeline:
               - parallel:
                   - step:
                       type: Verify
-                      name: Verify_4
+                      name: Verify 80
                       identifier: Verify_4
                       spec:
                         isMultiServicesOrEnvs: true
