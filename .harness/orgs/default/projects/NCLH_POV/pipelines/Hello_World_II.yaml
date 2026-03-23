@@ -208,7 +208,6 @@ pipeline:
                     dryRun: false
                     applyOnly: false
                     forceApply: false
-                    applicationsList: []
                     retryStrategy: {}
                     retry: false
                     syncOptions:
@@ -220,6 +219,7 @@ pipeline:
                       prunePropagationPolicy: foreground
                       respectIgnoreDifferences: false
                       serverSideApply: false
+                    applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
                   timeout: 10m
             rollbackSteps: []
           services:
