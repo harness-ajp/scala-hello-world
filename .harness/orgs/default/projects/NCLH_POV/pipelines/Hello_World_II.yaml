@@ -176,7 +176,7 @@ pipeline:
                           primaryArtifactRef: <+input>
                           sources: <+input>
             metadata:
-              parallel: false
+              parallel: true
         tags: {}
         failureStrategies:
           - onFailure:
