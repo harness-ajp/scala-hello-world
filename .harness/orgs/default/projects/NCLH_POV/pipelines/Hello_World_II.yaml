@@ -136,8 +136,12 @@ pipeline:
             gitOpsClusters:
               - identifier: incluster
                 agentIdentifier: harnessgitopsagent
-          service:
-            serviceRef: Scala_Hello_World_Backend
+          services:
+            values:
+              - serviceRef: Scala_Hello_World_Backend
+              - serviceRef: Scala_Hello_World_Frontend
+            metadata:
+              parallel: true
         tags: {}
         failureStrategies:
           - onFailure:
@@ -208,8 +212,12 @@ pipeline:
             gitOpsClusters:
               - identifier: incluster
                 agentIdentifier: harnessgitopsagent
-          service:
-            serviceRef: Scala_Hello_World_Backend
+          services:
+            values:
+              - serviceRef: Scala_Hello_World_Backend
+              - serviceRef: Scala_Hello_World_Frontend
+            metadata:
+              parallel: false
         tags: {}
         failureStrategies:
           - onFailure:
