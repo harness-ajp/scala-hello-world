@@ -156,6 +156,8 @@ pipeline:
                     agentIdentifier: harnessgitopsagent
                     namespace: scala-apps-development
                     rolloutName: canary
+                    waitUntilHealthStatus:
+                      healthStatus: Suspended
                   timeout: 10m
               - parallel:
                   - step:
@@ -337,6 +339,8 @@ pipeline:
                     agentIdentifier: harnessgitopsagent
                     namespace: scala-apps-development
                     rolloutName: canary
+                    waitUntilHealthStatus:
+                      healthStatus: Suspended
                   timeout: 10m
               - parallel:
                   - step:
