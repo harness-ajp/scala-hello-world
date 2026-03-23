@@ -145,7 +145,8 @@ pipeline:
                     applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
                   timeout: 10m
                   when:
-                    stageStatus: Success
+                    stageStatus: All
+                    condition: "false"
             rollbackSteps: []
           environment:
             environmentRef: development
@@ -198,6 +199,28 @@ pipeline:
                   identifier: fetchLinkedApps
                   timeout: 10m
                   spec: {}
+              - step:
+                  type: GitOpsSync
+                  name: GitOpsSync_1
+                  identifier: GitOpsSync_1
+                  spec:
+                    prune: false
+                    dryRun: false
+                    applyOnly: false
+                    forceApply: false
+                    applicationsList: []
+                    retryStrategy: {}
+                    retry: false
+                    syncOptions:
+                      skipSchemaValidation: false
+                      autoCreateNamespace: false
+                      pruneResourcesAtLast: false
+                      applyOutOfSyncOnly: false
+                      replaceResources: false
+                      prunePropagationPolicy: foreground
+                      respectIgnoreDifferences: false
+                      serverSideApply: false
+                  timeout: 10m
             rollbackSteps: []
           services:
             values:
