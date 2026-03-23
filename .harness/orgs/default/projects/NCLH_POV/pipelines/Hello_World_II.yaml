@@ -142,7 +142,7 @@ pipeline:
                       prunePropagationPolicy: foreground
                       respectIgnoreDifferences: false
                       serverSideApply: false
-                    applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
+                    applicationRegex: scala-hello-backend-<+env.identifier>
                   timeout: 10m
                   when:
                     stageStatus: Success
@@ -198,7 +198,7 @@ pipeline:
                       prunePropagationPolicy: foreground
                       respectIgnoreDifferences: false
                       serverSideApply: false
-                    applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
+                    applicationRegex: scala-hello-backend-<+env.identifier>
                   timeout: 10m
                   when:
                     stageStatus: Success
