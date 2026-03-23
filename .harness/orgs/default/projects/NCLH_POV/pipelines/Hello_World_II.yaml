@@ -122,7 +122,6 @@ pipeline:
                   spec: {}
                   when:
                     stageStatus: Success
-                    condition: "false"
               - step:
                   type: GitOpsSync
                   name: GitOpsSync
@@ -146,8 +145,7 @@ pipeline:
                     applicationRegex: <+stage.spec.execution.steps.fetchLinkedApps.output.linkedApps>
                   timeout: 10m
                   when:
-                    stageStatus: All
-                    condition: "false"
+                    stageStatus: Success
             rollbackSteps: []
           environment:
             environmentRef: development
