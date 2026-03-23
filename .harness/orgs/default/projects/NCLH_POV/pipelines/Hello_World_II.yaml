@@ -184,6 +184,58 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+    - stage:
+        name: Deploy to QA
+        identifier: Deploy_to_QA
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          gitOpsEnabled: true
+          execution:
+            steps:
+              - step:
+                  type: GitOpsFetchLinkedApps
+                  name: Fetch Linked Apps
+                  identifier: fetchLinkedApps
+                  timeout: 10m
+                  spec: {}
+            rollbackSteps: []
+          services:
+            values:
+              - serviceRef: Scala_Hello_World_Backend
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+              - serviceRef: Scala_Hello_World_Frontend
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+            metadata:
+              parallel: true
+          environment:
+            environmentRef: harnessqa
+            deployToAll: false
+            gitOpsClusters:
+              - identifier: incluster
+                agentIdentifier: harnessgitopsagent
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
   allowStageExecutions: false
   identifier: Hello_World_II
   description: Created by AJ Pahl
