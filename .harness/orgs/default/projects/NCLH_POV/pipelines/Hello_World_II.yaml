@@ -124,9 +124,7 @@ pipeline:
                       prunePropagationPolicy: foreground
                       respectIgnoreDifferences: false
                       serverSideApply: false
-                    applicationsList:
-                      - applicationName: scala-hello-backend-development
-                        agentId: harnessgitopsagent
+                    applicationsList: []
                   timeout: 10m
                   when:
                     stageStatus: Success
@@ -197,9 +195,7 @@ pipeline:
                       prunePropagationPolicy: foreground
                       respectIgnoreDifferences: false
                       serverSideApply: false
-                    applicationsList:
-                      - applicationName: scala-hello-backend-harnessqa
-                        agentId: harnessgitopsagent
+                    applicationsList: []
                   timeout: 10m
                   when:
                     stageStatus: Success
