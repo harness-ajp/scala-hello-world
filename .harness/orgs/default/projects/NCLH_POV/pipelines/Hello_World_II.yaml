@@ -101,7 +101,8 @@ pipeline:
                   name: Fetch Linked Apps
                   identifier: fetchLinkedApps
                   timeout: 10m
-                  spec: {}
+                  spec:
+                    filterByServiceEnvCluster: true
                   when:
                     stageStatus: Success
               - step:
@@ -174,7 +175,8 @@ pipeline:
                   name: Fetch Linked Apps
                   identifier: fetchLinkedApps
                   timeout: 10m
-                  spec: {}
+                  spec:
+                    filterByServiceEnvCluster: true
               - step:
                   type: GitOpsSync
                   name: GitOpsSync_1
