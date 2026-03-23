@@ -155,14 +155,6 @@ pipeline:
                 agentIdentifier: harnessgitopsagent
           service:
             serviceRef: Scala_Hello_World_Backend
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
         tags: {}
         failureStrategies:
           - onFailure:
@@ -219,14 +211,6 @@ pipeline:
                 agentIdentifier: harnessgitopsagent
           service:
             serviceRef: Scala_Hello_World_Backend
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
         tags: {}
         failureStrategies:
           - onFailure:
